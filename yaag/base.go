@@ -29,6 +29,41 @@ const Template = `<!DOCTYPE html>
         .null { color: magenta; }
         .key { color: red; }
 
+        /* BEGIN ADDED */
+        .table     {
+            display: table;
+            width: 100%;
+            margin: 0px;
+        }
+
+        .tr        {
+            display: table-row;
+            height: 100%;
+        }
+
+        .td, .th   {
+            display: table-cell;
+            padding: 5px;
+            height: 100%;
+            max-width: 10%!important;
+        }
+        .caption   { display: table-caption; }
+
+        .th        { font-weight: bold; }
+
+        /*.tr:nth-child(odd) .td{
+            background-color: white;
+        }
+
+        .tr:nth-child(even) .td{
+            background-color: #eee;
+        }*/
+
+        span {
+            height: 100%
+        }
+        /* END ADDED */
+
     </style>
     <style type="text/css">
         pre.prettyprint {
@@ -78,7 +113,7 @@ const Template = `<!DOCTYPE html>
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">{{.Title}}</a>
-            <p class="navbar-text">Developed by Gophers at <a href="http://betacraft.co">Betacraft</a></p>
+            <!-- <p class="navbar-text">Developed by Gophers at <a href="http://betacraft.co">Betacraft</a></p> -->
         </div>
             
         <!-- /.navbar-collapse -->
@@ -91,9 +126,16 @@ const Template = `<!DOCTYPE html>
         <div class="panel panel-default">
               <div class="panel-heading">Base Urls</div>
               <div class="panel-body">
-                {{ range $key, $value := .baseUrls }}
-                    <p>{{$key}} : <strong>{{ $value }}</strong></p>
-                {{ end }}
+		      <div class="table">
+			{{ range $key, $value := .baseUrls }}
+	<!--                    <p>{{$key}} : <a href="{{ $value }}">{{ $value }}</href></p> -->
+	<!--                    <p>{{$key}} : <strong>{{ $value }}</strong></p> -->
+			     <div class="tr">
+				<div class="th" style="text-align: right;"><span> {{ $key }}</span></div>
+				<div class="td" style="text-align: left;"><span> {{ $value }}</span></div>
+			     </div>
+			{{ end }}
+		      </div>
               </div>
             </div>    
         <ul class="nav nav-pills nav-stacked" role="tablist">
@@ -169,7 +211,7 @@ const Template = `<!DOCTYPE html>
                 </script>
                 {{ end }}
                 <p><h4> Response Code</h4></p>
-                <pre class="prettyprint lang-json">{{ $wrapperValue.ResponseCode }}</pre>
+                <pre class="prettyprint lang-json">{{ $wrapperValue.ResponseCode }} - {{ $wrapperValue.ResponseCodeString }}</pre>
                 {{ if $wrapperValue.ResponseHeader }}
                 <p><h4> Response Headers</h4></p>
                 <table class="table table-bordered table-striped">

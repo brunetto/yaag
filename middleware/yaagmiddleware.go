@@ -81,10 +81,14 @@ func Before(apiCall *models.ApiCall, req *http.Request) {
 		case "application/x-www-form-urlencoded":
 			fallthrough
 		case "application/json, application/x-www-form-urlencoded":
-			log.Println("Reading form")
+			if yaag.Debug {
+				log.Println("Reading form")
+			}
 			apiCall.PostForm = ReadPostForm(req)
 		case "application/json":
-			log.Println("Reading body")
+			if yaag.Debug {
+				log.Println("Reading body")
+			}
 			apiCall.RequestBody = *ReadBody(req)
 		default:
 			if strings.Contains(ct, "multipart/form-data") {
@@ -113,7 +117,9 @@ func ReadQueryParams(req *http.Request) map[string]string {
 
 func printMap(m map[string]string) {
 	for key, value := range m {
-		log.Println(key, "=>", value)
+		if yaag.Debug {
+			log.Println(key, "=>", value)
+		}
 	}
 }
 
@@ -133,7 +139,9 @@ func ReadMultiPostForm(mpForm *multipart.Form) map[string]string {
 
 func ReadPostForm(req *http.Request) map[string]string {
 	postForm := map[string]string{}
-	log.Println("", *ReadBody(req))
+	if yaag.Debug {
+		log.Println("", *ReadBody(req))
+	}
 	for _, param := range strings.Split(*ReadBody(req), "&") {
 		value := strings.Split(param, "=")
 		postForm[value[0]] = value[1]
@@ -161,7 +169,9 @@ func ReadHeaders(req *http.Request) map[string]string {
 func ReadHeadersFromResponse(writer *httptest.ResponseRecorder) map[string]string {
 	headers := map[string]string{}
 	for k, v := range writer.Header() {
-		log.Println(k, v)
+		if yaag.Debug {
+			log.Println(k, v)
+		}
 		headers[k] = strings.Join(v, " ")
 	}
 	return headers
@@ -205,6 +215,9 @@ func After(apiCall *models.ApiCall, writer *httptest.ResponseRecorder, w http.Re
 		apiCall.MethodType = r.Method
 		apiCall.CurrentPath = strings.Split(r.RequestURI, "?")[0]
 		apiCall.ResponseBody = writer.Body.String()
+		if yaag.Debug {
+			log.Println("body", apiCall.ResponseBody)
+		}
 		apiCall.ResponseCode = writer.Code
 		apiCall.ResponseHeader = ReadHeadersFromResponse(writer)
 		go yaag.GenerateHtml(apiCall)

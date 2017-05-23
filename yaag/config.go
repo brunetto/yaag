@@ -1,5 +1,7 @@
 package yaag
 
+var Debug = false
+
 type Config struct {
 	On bool
 

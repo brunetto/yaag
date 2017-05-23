@@ -16,4 +16,5 @@ type ApiCall struct {
 	RequestBody  string
 	ResponseBody string
 	ResponseCode int
+	ResponseCodeString string
 }
