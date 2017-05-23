@@ -5,10 +5,10 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	"github.com/betacraft/yaag/middleware"
-	"github.com/betacraft/yaag/yaag"
-	"github.com/betacraft/yaag/yaag/models"
-	"github.com/gin-gonic/gin"
+	"github.com/brunetto/yaag/middleware"
+	"github.com/brunetto/yaag/yaag"
+	"github.com/brunetto/yaag/yaag/models"
+	"gopkg.in/gin-gonic/gin.v1"
 )
 
 func Document() gin.HandlerFunc {
